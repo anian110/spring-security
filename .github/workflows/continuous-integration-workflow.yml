@@ -70,7 +70,9 @@ jobs:
       - name: Notify on failure
         if: ${{ failure() }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text": ":x: Step *'${GITHUB_JOB}'* failed for commit '"${COMMIT_SHA:0:9}"'"}' "$SLACK_WEBHOOK_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"text": ":x: Step *'${GITHUB_JOB}' ('$JDK_VERSION')* failed for commit '"${COMMIT_SHA:0:9}"'"}' "$SLACK_WEBHOOK_URL"
+        env:
+          JDK_VERSION: ${{ matrix.jdk }}
   snapshot_tests:
     name: Test against snapshots
     runs-on: ubuntu-latest
