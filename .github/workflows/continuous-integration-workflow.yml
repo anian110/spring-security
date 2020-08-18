@@ -21,12 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Notify build start
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build started for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}]}' "$SLACK_WEBHOOK_URL"
+#      - name: Notify build start
+#        run: |
+#          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build started for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}]}' "$SLACK_WEBHOOK_URL"
       - name: Initialize failure folder
         run: |
-          echo "*****" > results.txt
+          echo "*****" > job-results.txt
       - name: Export initial errors file
         uses: actions/upload-artifact@v2
         with:
@@ -50,7 +50,7 @@ jobs:
       - name: Output failure
         if: ${{ failure() }}
         run: |
-          echo "*'${GITHUB_JOB}'* failed" > ${GITHUB_JOB}'.txt
+          echo "*'${GITHUB_JOB}'* failed" > "job-'${GITHUB_JOB}'".txt
       - name: Export errors file
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -231,5 +231,5 @@ jobs:
           name: errors
       - name: Print the final result
         run: |
-          value=`cat *.txt`
+          value=`cat job-*.txt`
           echo The errors result is $value
