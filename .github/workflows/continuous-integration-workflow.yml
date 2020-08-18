@@ -183,15 +183,15 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-      - name: Deploy artifacts
-        run: |
-          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
-          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
-          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
-          export VERSION_HEADER=$'Version: GnuPG v2\n\n'
-          export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
-          export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
-          ./gradlew deployArtifacts finalizeDeployArtifacts -PossrhUsername="$OSSRH_USERNAME" -PossrhPassword="$OSSRH_PASSWORD" -PartifactoryUsername="$ARTIFACTORY_USERNAME" -PartifactoryPassword="$ARTIFACTORY_PASSWORD" --stacktrace
+#      - name: Deploy artifacts
+#        run: |
+#          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
+#          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
+#          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
+#          export VERSION_HEADER=$'Version: GnuPG v2\n\n'
+#          export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
+#          export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
+#          ./gradlew deployArtifacts finalizeDeployArtifacts -PossrhUsername="$OSSRH_USERNAME" -PossrhPassword="$OSSRH_PASSWORD" -PartifactoryUsername="$ARTIFACTORY_USERNAME" -PartifactoryPassword="$ARTIFACTORY_PASSWORD" --stacktrace
 #        env:
 #          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 #          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -224,16 +224,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-      - name: Deploy Docs
-        run: |
-          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
-          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
-          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
-          ./gradlew deployDocs -PdeployDocsSshKey="$DOCS_SSH_KEY" -PdeployDocsSshUsername="$DOCS_USERNAME" -PdeployDocsHost="$DOCS_HOST" --stacktrace
-        env:
-          DOCS_USERNAME: ${{ secrets.DOCS_USERNAME }}
-          DOCS_SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
-          DOCS_HOST: ${{ secrets.DOCS_HOST }}
+#      - name: Deploy Docs
+#        run: |
+#          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
+#          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
+#          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
+#          ./gradlew deployDocs -PdeployDocsSshKey="$DOCS_SSH_KEY" -PdeployDocsSshUsername="$DOCS_USERNAME" -PdeployDocsHost="$DOCS_HOST" --stacktrace
+#        env:
+#          DOCS_USERNAME: ${{ secrets.DOCS_USERNAME }}
+#          DOCS_SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
+#          DOCS_HOST: ${{ secrets.DOCS_HOST }}
 #      - name: Notify on failure
 #        if: ${{ failure() }}
 #        run: |
@@ -259,16 +259,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-      - name: Deploy Schema
-        run: |
-          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
-          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
-          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
-          ./gradlew deploySchema -PdeployDocsSshKey="$DOCS_SSH_KEY" -PdeployDocsSshUsername="$DOCS_USERNAME" -PdeployDocsHost="$DOCS_HOST" --stacktrace --info
-        env:
-          DOCS_USERNAME: ${{ secrets.DOCS_USERNAME }}
-          DOCS_SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
-          DOCS_HOST: ${{ secrets.DOCS_HOST }}
+#      - name: Deploy Schema
+#        run: |
+#          export GRADLE_ENTERPRISE_CACHE_USERNAME="$GRADLE_ENTERPRISE_CACHE_USER"
+#          export GRADLE_ENTERPRISE_CACHE_PASSWORD="$GRADLE_ENTERPRISE_CACHE_PASSWORD"
+#          export GRADLE_ENTERPRISE_ACCESS_KEY="$GRADLE_ENTERPRISE_SECRET_ACCESS_KEY"
+#          ./gradlew deploySchema -PdeployDocsSshKey="$DOCS_SSH_KEY" -PdeployDocsSshUsername="$DOCS_USERNAME" -PdeployDocsHost="$DOCS_HOST" --stacktrace --info
+#        env:
+#          DOCS_USERNAME: ${{ secrets.DOCS_USERNAME }}
+#          DOCS_SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
+#          DOCS_HOST: ${{ secrets.DOCS_HOST }}
 #      - name: Notify on failure
 #        if: ${{ failure() }}
 #        run: |
@@ -303,4 +303,6 @@ jobs:
           cat job-*.txt > results.txt
           cat results.txt
           results="$(cat results.txt)"
-          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build not successful for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}, {"type":"section","text":{"type":"plain_text","text":"\n '"$results"'"}}]}' "$SLACK_WEBHOOK_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build not successful for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}, {"type":"section","text":{"type":"mrkdwn","text":"\n '"$results"'"}}]}' "$SLACK_WEBHOOK_URL"
+
+# delete artifacts as last step
