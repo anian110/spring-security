@@ -51,7 +51,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -92,7 +92,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB-$JDK_VERSION
-          echo "*${GITHUB_JOB}-${JDK_VERSION}* failed" > job-$GITHUB_JOB-$JDK_VERSION.txt
+          echo ":exclamation: *${GITHUB_JOB}-${JDK_VERSION}* failed" > job-$GITHUB_JOB-$JDK_VERSION.txt
         env:
           JDK_VERSION: ${{ matrix.jdk }}
       - name: Export errors file
@@ -124,7 +124,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -166,7 +166,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -207,7 +207,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -242,7 +242,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -277,7 +277,7 @@ jobs:
         if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo "*${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -303,4 +303,4 @@ jobs:
           cat job-*.txt > results.txt
           cat results.txt
           results="$(cat results.txt)"
-          curl -X POST -H 'Content-type: application/json' --data '{"text": ":x: Build failed for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch. \n '"$results"'"}' "$SLACK_WEBHOOK_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build not successful for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}, {"type":"section","text":{"type":"plain_text","text":"\n '"$results"'"}}]}' "$SLACK_WEBHOOK_URL"
