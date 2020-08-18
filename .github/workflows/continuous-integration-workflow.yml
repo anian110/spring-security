@@ -50,7 +50,7 @@ jobs:
       - name: Output failure
 #        if: ${{ failure() }}
         run: |
-          echo This is the job name '${GITHUB_JOB}'
+          echo This is the job name $GITHUB_JOB
           echo "*'${GITHUB_JOB}'* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
