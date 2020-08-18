@@ -50,7 +50,7 @@ jobs:
       - name: Output failure
 #        if: ${{ failure() }}
         run: |
-          echo "*'${GITHUB_JOB}'* failed" > "job-'$GITHUB_JOB'".txt
+          echo "*'${GITHUB_JOB}'* failed" > job-'${GITHUB_JOB}'.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
