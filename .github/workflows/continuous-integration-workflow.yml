@@ -303,6 +303,6 @@ jobs:
           cat job-*.txt > results.txt
           cat results.txt
           results="$(cat results.txt)"
-          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Build not successful for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}' branch"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}, {"type":"section","text":{"type":"mrkdwn","text":"\n '"$results"'"}}]}' "$SLACK_WEBHOOK_URL"
+          curl -X POST -H 'Content-type: application/json' --data '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"CI build failed for commit '"${COMMIT_SHA:0:9}"' on '${GITHUB_REF#refs/heads/}'"}},{"type":"section","text":{"type":"mrkdwn","text":"— _Author: '"$COMMIT_OWNER"'_"}}, {"type":"section","text":{"type":"mrkdwn","text":"\n '"$results"'"}}]}' "$SLACK_WEBHOOK_URL"
 
 # delete artifacts as last step
