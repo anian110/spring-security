@@ -51,7 +51,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
@@ -92,7 +92,7 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB-$JDK_VERSION
-          echo ":exclamation: *${GITHUB_JOB}-${JDK_VERSION}* failed" > job-$GITHUB_JOB-$JDK_VERSION.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}-${JDK_VERSION}* failed" > job-$GITHUB_JOB-$JDK_VERSION.txt
         env:
           JDK_VERSION: ${{ matrix.jdk }}
       - name: Export errors file
@@ -124,14 +124,14 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: errors
           path: job-${{ github.job }}.txt
-  sonar:
+  sonar_analysis:
     name: Static Code Analysis
     runs-on: ubuntu-latest
     env:
@@ -166,16 +166,16 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: errors
           path: job-${{ github.job }}.txt
-  artifacts:
+  deploy_artifacts:
     name: Deploy Artifacts
-    needs: [build, test_alternate_jdks, snapshot_tests, sonar]
+    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -207,16 +207,16 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: errors
           path: job-${{ github.job }}.txt
-  docs:
+  deploy_docs:
     name: Deploy Docs
-    needs: [build, test_alternate_jdks, snapshot_tests, sonar]
+    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -242,16 +242,16 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
 #        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: errors
           path: job-${{ github.job }}.txt
-  schema:
+  deploy_schema:
     name: Deploy Schema
-    needs: [build, test_alternate_jdks, snapshot_tests, sonar]
+    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -274,19 +274,19 @@ jobs:
 #        run: |
 #          curl -X POST -H 'Content-type: application/json' --data '{"text": ":x: Step *'${GITHUB_JOB}'* failed for commit '"${COMMIT_SHA:0:9}"'"}' "$SLACK_WEBHOOK_URL"
       - name: Output failure
-        if: ${{ failure() }}
+#        if: ${{ failure() }}
         run: |
           echo This is the job name $GITHUB_JOB
-          echo ":exclamation: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
+          echo ":no_entry_sign: *${GITHUB_JOB}* failed" > job-$GITHUB_JOB.txt
       - name: Export errors file
-        if: ${{ failure() }}
+#        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: errors
           path: job-${{ github.job }}.txt
   notify_result:
     name: Check for failure files
-    needs: [build, test_alternate_jdks, snapshot_tests, sonar, artifacts, docs, schema]
+    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis, deploy_artifacts, deploy_docs, deploy_schema]
     if: always()
     runs-on: ubuntu-latest
     steps:
