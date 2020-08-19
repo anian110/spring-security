@@ -66,7 +66,7 @@ public class AbstractSecurityExpressionHandlerTests {
 	public void setExpressionParser() {
 		SpelExpressionParser parser = new SpelExpressionParser();
 		handler.setExpressionParser(parser);
-		assertThat(parser == handler.getExpressionParser()).isFalse();
+		assertThat(parser == handler.getExpressionParser()).isTrue();
 	}
 }
 
