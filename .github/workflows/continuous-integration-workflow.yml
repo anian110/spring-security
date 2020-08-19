@@ -250,7 +250,8 @@ jobs:
 #          path: job-${{ github.job }}.txt
   notify_result:
     name: Check for failures
-    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis, deploy_artifacts, deploy_docs, deploy_schema]
+#    needs: [build, test_alternate_jdks, snapshot_tests, sonar_analysis, deploy_artifacts, deploy_docs, deploy_schema]
+    needs: [build]
     if: always()
     runs-on: ubuntu-latest
     steps:
