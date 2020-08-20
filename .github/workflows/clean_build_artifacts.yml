@@ -7,16 +7,11 @@ jobs:
       - name: Delete artifacts
         if: github.event.action == 'delete_all_artifacts'
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_REPO_TOKEN }}
-          PARENT_RUN_ID: ${{ github.event.client_payload.parent_runid  }}
+          GH_ACTIONS_REPO_TOKEN: ${{ secrets.GH_ACTIONS_REPO_TOKEN }}
+          PARENT_RUN_ID: ${{ github.event.client_payload.parent_run_id  }}
           PARENT_REPO: ${{ github.event.client_payload.parent_repo }}
         run: |
           echo "Running clean build artifacts logic"
-          echo Github token: $GITHUB_TOKEN
           echo Parent run id: $PARENT_RUN_ID
-          echo Parent repo: PARENT_REPO
-
-
-
-#  curl --silent --location --user $GITHUB_USER:$GITHUB_TOKEN "$@";
-#  -X DELETE $REPO/actions/artifacts/$id
+          echo Parent repo: $PARENT_REPO
+          curl -X DELETE -H "Authorization: token $GH_ACTIONS_REPO_TOKEN” https://api.github.com/repos/spring-projects/spring-security/actions/artifacts/123
