@@ -4,6 +4,9 @@ on:
     types: [delete_all_artifacts]
   schedule:
     - cron: '*/5 * * * *' # Every 5 minutes (for now, while testing)
+  push:
+    branches:
+      - deploy-pipeline-test # for testing
 
 jobs:
 #  main:
