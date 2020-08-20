@@ -1,5 +1,7 @@
 name: Clean build artifacts
-on: repository_dispatch
+on:
+  repository_dispatch:
+    types: [delete_all_artifacts]
 jobs:
   main:
     runs-on: ubuntu-latest
