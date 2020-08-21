@@ -1,10 +1,9 @@
 name: Clean build artifacts
 on:
   repository_dispatch:
-    types: [delete_all_artifacts]
-  push:
-    branches:
-      - deploy-pipeline-test # for testing
+    types: [delete_all_artifacts] # potentially get rid of this since we only want cron job
+  schedule:
+    - cron: '0 10 * * *' # Once per day at 10am UTC
 
 jobs:
 #  main:
